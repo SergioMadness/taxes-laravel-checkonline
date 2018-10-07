@@ -1,0 +1,49 @@
+{
+  "name": "professionalweb/taxes-laravel-checkonline",
+  "description": "Library for Laravel to send receipts to tax service through CheckOnline",
+  "homepage": "http://web-development.pw/",
+  "keywords": [
+    "pwf",
+    "professional web",
+    "web-development.pw",
+    "composer",
+    "payment system",
+    "checkonline",
+    "laravel"
+  ],
+  "minimum-stability": "stable",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Zinchenko Sergey",
+      "email": "zinchenko@web-development.pw"
+    }
+  ],
+  "support": {
+    "email": "info@web-development.pw",
+    "issues": "https://github.com/SergioMadness/taxes-laravel-checkonline/issues",
+    "wiki": "https://github.com/SergioMadness/taxes-laravel-checkonline/wiki",
+    "source": "https://github.com/SergioMadness/taxes-laravel-checkonline/releases"
+  },
+  "require": {
+    "professionalweb/taxes-laravel": "^1.0"
+  },
+  "require-dev": {
+  },
+  "config": {
+    "process-timeout": 1800
+  },
+  "autoload": {
+    "psr-4": {
+      "professionalweb\\taxes\\": "src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "professionalweb\\taxes\\CheckOnlineProvider"
+      ]
+    }
+  }
+}
