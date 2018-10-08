@@ -27,7 +27,7 @@
     "source": "https://github.com/SergioMadness/taxes-laravel-checkonline/releases"
   },
   "require": {
-    "professionalweb/taxes-laravel": "^1.0"
+    "professionalweb/taxes-laravel": "dev-develop"
   },
   "require-dev": {
   },
