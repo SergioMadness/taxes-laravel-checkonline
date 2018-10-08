@@ -1,4 +1,4 @@
-<?php namespace professionalweb\chekonline\services;
+<?php namespace professionalweb\taxes\chekonline\services;
 
 use professionalweb\chekonline\interfaces\CheckOnline as ICheckOnline;
 use professionalweb\taxes\interfaces\Receipt;
@@ -6,7 +6,7 @@ use professionalweb\taxes\interfaces\ReceiptItem;
 
 /**
  * Wrapper for checkonline service
- * @package professionalweb\chekonline\services
+ * @package professionalweb\taxes\chekonline\services
  */
 class CheckOnline implements ICheckOnline
 {
