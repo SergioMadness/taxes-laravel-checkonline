@@ -1,4 +1,4 @@
-<?php namespace professionalweb\taxes\chekonline\interfaces;
+<?php namespace professionalweb\taxes\checkonline\interfaces;
 
 use professionalweb\taxes\interfaces\TaxService;
 

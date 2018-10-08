@@ -1,8 +1,8 @@
-<?php namespace professionalweb\taxes\chekonline;
+<?php namespace professionalweb\taxes\checkonline;
 
 use Illuminate\Support\ServiceProvider;
-use professionalweb\taxes\chekonline\services\CheckOnline;
-use professionalweb\taxes\chekonline\interfaces\CheckOnline as ICheckOnline;
+use professionalweb\taxes\checkonline\services\CheckOnline;
+use professionalweb\taxes\checkonline\interfaces\CheckOnline as ICheckOnline;
 
 class CheckOnlineProvider extends ServiceProvider
 {
