@@ -25,9 +25,10 @@ class CheckOnlineProvider extends ServiceProvider
     {
         $this->app->bind(ICheckOnline::class, function () {
             return new CheckOnline(
-                config('chekonline.url'),
-                config('chekonline.cert'),
-                config('chekonline.key')
+                config('chekonline.url', ''),
+                config('chekonline.cert', ''),
+                config('chekonline.key', ''),
+                config('chekonline.device', 'auto')
             );
         });
     }

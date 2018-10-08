@@ -1,7 +1,8 @@
 <?php namespace professionalweb\chekonline\services;
 
-use professionalweb\taxes\interfaces\Receipt;
 use professionalweb\chekonline\interfaces\CheckOnline as ICheckOnline;
+use professionalweb\taxes\interfaces\Receipt;
+use professionalweb\taxes\interfaces\ReceiptItem;
 
 /**
  * Wrapper for checkonline service
@@ -17,30 +18,21 @@ class CheckOnline implements ICheckOnline
     /**
      * @var string
      */
-    private $requestId;
+    private $url;
 
     /**
-     * @param string $device
-     *
-     * @return self
+     * @var string
      */
-    public function setDevice(string $device): ICheckOnline
-    {
-        $this->device = $device;
-
-        return $this;
-    }
+    private $cert;
 
     /**
-     * @param string $requestId
-     *
-     * @return self
+     * @var string
      */
-    public function setRequestId(string $requestId): ICheckOnline
-    {
-        $this->requestId = $requestId;
+    private $key;
 
-        return $this;
+    public function __construct(string $url = '', string $cert = '', string $key = '', string $device = '')
+    {
+        $this->setUrl($url)->setCert($cert)->setKey($key)->setDevice($device);
     }
 
     /**
@@ -53,24 +45,28 @@ class CheckOnline implements ICheckOnline
      */
     public function sendReceipt(Receipt $receipt)
     {
+        $products = [];
+        $totalSum = 0;
+        foreach ($receipt->getItems() as $item) {
+            /** @var ReceiptItem $item */
+            $products[] = [
+                'Qty'          => $item->getQty() * 1000,
+                'Price'        => $item->getPrice() * 100,
+                'PayAttribute' => self::FULL_PAY,
+                'TaxId'        => $item->getTax(),
+                'Description'  => $item->getName(),
+            ];
+            $totalSum += $item->getPrice() * 100;
+        }
+
         $params = [
-            'Device'       => $this->device,
-            'RequestId'    => $this->requestId,
-            'Lines'        => $this->lines,
-            'NonCash'      => [$this->nonCash],
-            'TaxMode'      => $this->taxMode,
-            'PhoneOrEmail' => $this->phoneOrEmail,
+            'Device'       => $this->getDevice(),
+            'RequestId'    => md5(time() . str_random()),
+            'Lines'        => $products,
+            'NonCash'      => [$totalSum],
+            'TaxMode'      => $receipt->getTaxSystem(),
+            'PhoneOrEmail' => $receipt->getContact(),
         ];
-
-        $products[] = [
-            'Qty'          => $qty * 1000,
-            'Price'        => $price * 100,
-            'PayAttribute' => $payAttribute,
-            'TaxId'        => $taxId,
-            'Description'  => $description,
-        ];
-
-        $total += $price * $qty * 100;
 
         $json = json_encode($params);
 
@@ -81,10 +77,8 @@ class CheckOnline implements ICheckOnline
         curl_setopt($curl, CURLOPT_POST, true);
         curl_setopt($curl, CURLOPT_POSTFIELDS, $json);
         curl_setopt($curl, CURLOPT_URL, $this->url);
-        // Сертификат
-        curl_setopt($curl, CURLOPT_SSLCERT, $this->cert);
-        // Закрытый ключ
-        curl_setopt($curl, CURLOPT_SSLKEY, $this->key);
+        curl_setopt($curl, CURLOPT_SSLCERT, $this->getCert());
+        curl_setopt($curl, CURLOPT_SSLKEY, $this->getKey());
         $response = curl_exec($curl);
         $error = curl_error($curl);
         $status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
@@ -104,4 +98,87 @@ class CheckOnline implements ICheckOnline
 
         return $response;
     }
+
+    //<editor-fold desc="Getters and setters">
+
+    /**
+     * @param string $device
+     *
+     * @return self
+     */
+    public function setDevice(string $device): ICheckOnline
+    {
+        $this->device = $device;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDevice(): string
+    {
+        return $this->device;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrl(): string
+    {
+        return $this->url;
+    }
+
+    /**
+     * @param string $url
+     *
+     * @return $this
+     */
+    public function setUrl(string $url): self
+    {
+        $this->url = $url;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCert(): string
+    {
+        return $this->cert;
+    }
+
+    /**
+     * @param string $cert
+     *
+     * @return $this
+     */
+    public function setCert(string $cert): self
+    {
+        $this->cert = $cert;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getKey(): string
+    {
+        return $this->key;
+    }
+
+    /**
+     * @param string $key
+     *
+     * @return $this
+     */
+    public function setKey(string $key): self
+    {
+        $this->key = $key;
+
+        return $this;
+    }
+    //</editor-fold>
 }

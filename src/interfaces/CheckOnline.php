@@ -8,17 +8,14 @@ interface CheckOnline extends TaxService
 
     public const DEFAULT_DEVICE = 'auto';
 
+    public const FULL_PAY = 1;
+
+    public const PART_PAY = 2;
+
     /**
      * @param string $device
      *
      * @return self
      */
     public function setDevice(string $device): self;
-
-    /**
-     * @param string $requestId
-     *
-     * @return self
-     */
-    public function setRequestId(string $requestId): self;
 }
