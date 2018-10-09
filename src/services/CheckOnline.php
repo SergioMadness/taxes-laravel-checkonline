@@ -2,7 +2,9 @@
 
 use professionalweb\taxes\interfaces\Receipt;
 use professionalweb\taxes\interfaces\ReceiptItem;
+use professionalweb\taxes\models\TaxServiceOption;
 use professionalweb\taxes\checkonline\interfaces\CheckOnline as ICheckOnline;
+use professionalweb\taxes\interfaces\TaxServiceOption as ITaxServiceOption;
 
 /**
  * Wrapper for checkonline service
@@ -97,6 +99,20 @@ class CheckOnline implements ICheckOnline
         }
 
         return $response;
+    }
+
+    /**
+     * Get tax service options
+     *
+     * @return array
+     */
+    public function getOptions(): array
+    {
+        return [
+            (new TaxServiceOption())->setAlias('url')->setLabel('Url')->setType(ITaxServiceOption::TYPE_STRING),
+            (new TaxServiceOption())->setAlias('cert')->setLabel('Certificate')->setType(ITaxServiceOption::TYPE_FILE),
+            (new TaxServiceOption())->setAlias('key')->setLabel('Key')->setType(ITaxServiceOption::TYPE_FILE),
+        ];
     }
 
     //<editor-fold desc="Getters and setters">
